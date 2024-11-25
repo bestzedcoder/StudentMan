@@ -8,6 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+
 
 class MainActivity : AppCompatActivity() {
   private lateinit var studentAdapter: StudentAdapter
@@ -125,5 +131,44 @@ class MainActivity : AppCompatActivity() {
         deletedPosition = -1
       }
     }.show()
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.option_menu, menu)
+    return true
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+      R.id.menu_add_new -> {
+        showAddDialog()
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
+    }
+  }
+
+  override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+    super.onCreateContextMenu(menu, v, menuInfo)
+    menuInflater.inflate(R.menu.context_menu, menu)
+  }
+
+  override fun onContextItemSelected(item: MenuItem): Boolean {
+    val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+    val position = info.position
+
+    return when (item.itemId) {
+      R.id.menu_edit -> {
+        val student = studentAdapter.getStudent(position)
+        showEditDialog(student, position)
+        true
+      }
+      R.id.menu_remove -> {
+        val student = studentAdapter.getStudent(position)
+        showDeleteDialog(student, position)
+        true
+      }
+      else -> super.onContextItemSelected(item)
+    }
   }
 }

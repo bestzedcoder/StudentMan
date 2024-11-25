@@ -44,6 +44,9 @@ class StudentAdapter(
       onItemClick(student, position, "delete")
     }
   }
+  fun getStudent(position: Int): StudentModel {
+    return students[position]
+  }
   fun addStudent(student: StudentModel) {
     students.add(student)
     notifyItemInserted(students.size - 1)
@@ -59,4 +62,5 @@ class StudentAdapter(
     notifyItemRemoved(position)
     return student
   }
+
 }
